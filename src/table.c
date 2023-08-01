@@ -1497,7 +1497,7 @@ mehcached_table_init(struct mehcached_table *table, size_t num_buckets, size_t n
         }
         while (true)
         {
-            table->buckets = mehcached_shm_find_free_address(shm_size);
+            table->buckets = (mehcached_bucket*)mehcached_shm_find_free_address(shm_size);
             if (table->buckets == NULL)
                 assert(false);
             if (mehcached_shm_map(shm_id, table->buckets, 0, shm_size))

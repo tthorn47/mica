@@ -52,7 +52,7 @@ mehcached_pool_init(struct mehcached_pool *alloc, uint64_t size, bool concurrent
 	}
     while (true)
     {
-		alloc->data = mehcached_shm_find_free_address(size + MEHCACHED_MINIMUM_POOL_SIZE);
+		alloc->data = (uint8_t*)mehcached_shm_find_free_address(size + MEHCACHED_MINIMUM_POOL_SIZE);
 		if (alloc->data == NULL)
 			assert(false);
 

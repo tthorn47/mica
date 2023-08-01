@@ -16,6 +16,6 @@
 
 #include "table.c"
 #include "alloc_pool.c"
-#include "alloc_malloc.c"
-#include "alloc_dynamic.c"
+//#include "alloc_malloc.c"
+//#include "alloc_dynamic.c"
 
