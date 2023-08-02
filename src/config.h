@@ -33,11 +33,11 @@
 // use log-structured pool allocator (other MEHCACHED_ALLOC_* must be undef)
 //#define MEHCACHED_ALLOC_POOL
 #ifndef MEHCACHED_NO_EVICTION
-#define MEHCACHED_ALLOC_POOL
+//#define MEHCACHED_ALLOC_POOL
 #endif
 
 // use malloc allocator for each item (other MEHCACHED_ALLOC_* must be undef)
-//#define MEHCACHED_ALLOC_MALLOC
+#define MEHCACHED_ALLOC_MALLOC
 
 // use custom dynamic allocator for each item (other MEHCACHED_ALLOC_* must be undef)
 //#define MEHCACHED_ALLOC_DYNAMIC

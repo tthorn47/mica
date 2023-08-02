@@ -1455,7 +1455,7 @@ mehcached_table_reset(struct mehcached_table *table)
 
 static
 void
-mehcached_table_init(struct mehcached_table *table, size_t num_buckets, size_t num_pools MEHCACHED_UNUSED, size_t pool_size MEHCACHED_UNUSED, bool concurrent_table_read, bool concurrent_table_write, bool concurrent_alloc_write, size_t table_numa_node, size_t alloc_numa_nodes[], double mth_threshold)
+mehcached_table_init(struct mehcached_table *table, size_t num_buckets, size_t num_pools MEHCACHED_UNUSED, size_t pool_size MEHCACHED_UNUSED, bool concurrent_table_read, bool concurrent_table_write, bool concurrent_alloc_write MEHCACHED_UNUSED, size_t table_numa_node MEHCACHED_UNUSED, size_t alloc_numa_nodes[] MEHCACHED_UNUSED, double mth_threshold)
 {
     assert((MEHCACHED_ITEMS_PER_BUCKET == 7 && sizeof(struct mehcached_bucket) == 64) || (MEHCACHED_ITEMS_PER_BUCKET == 15 && sizeof(struct mehcached_bucket) == 128) || (MEHCACHED_ITEMS_PER_BUCKET == 31 && sizeof(struct mehcached_bucket) == 256));
     assert(sizeof(struct mehcached_item) == 24);
@@ -1485,7 +1485,7 @@ mehcached_table_init(struct mehcached_table *table, size_t num_buckets, size_t n
     table->num_extra_buckets = table->num_buckets / 10;    // 10% of normal buckets
 #endif
 
-// #ifdef MEHCACHED_ALLOC_POOL
+ #ifdef MEHCACHED_ALLOC_POOL
     {
         size_t shm_size = mehcached_shm_adjust_size(sizeof(struct mehcached_bucket) * (table->num_buckets + table->num_extra_buckets));
         // TODO: extend num_buckets to meet shm_size
@@ -1506,14 +1506,14 @@ mehcached_table_init(struct mehcached_table *table, size_t num_buckets, size_t n
         if (!mehcached_shm_schedule_remove(shm_id))
             assert(false);
     }
-// #endif
-// #ifdef MEHCACHED_ALLOC_MALLOC
-//     {
-//         int ret = posix_memalign((void **)&table->buckets, 4096, sizeof(struct mehcached_bucket) * (table->num_buckets + table->num_extra_buckets));
-//         if (ret != 0)
-//             assert(false);
-//     }
-// #endif
+#endif
+#ifdef MEHCACHED_ALLOC_MALLOC
+    {
+        int ret = posix_memalign((void **)&table->buckets, 4096, sizeof(struct mehcached_bucket) * (table->num_buckets + table->num_extra_buckets));
+        if (ret != 0)
+            assert(false);
+    }
+#endif
     table->extra_buckets = table->buckets + table->num_buckets - 1; // subtract by one to compensate 1-base indices
     // the rest extra_bucket information is initialized in mehcached_table_reset()
 
